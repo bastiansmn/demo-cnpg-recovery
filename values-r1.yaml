@@ -1,8 +1,8 @@
 cnpg:
-  enabled: true
-  mode: primary
+  enabled: false
+  mode: recovery
   backup:
-    enabled: true
+    enabled: false
     endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r1.pi2.minint.fr
   recovery:
     endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r1.pi2.minint.fr
