@@ -1,6 +1,6 @@
 cnpg:
+  enabled: false
   mode: recovery
-  instances: 0
   backup:
     enabled: false
     endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r2.pi2.minint.fr
