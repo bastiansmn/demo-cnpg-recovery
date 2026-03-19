@@ -41,8 +41,8 @@ cnpg:
       memory: 256Mi
   backup:
     legacyMode: false
-    destinationPath: "s3://backups"
-    cron: 0 0 0 * * *
+    destinationPath: "s3://demo-backup"
+    cron: '*/30 * * * *'
     retentionPolicy: 1d
     compression: gzip
     endpointCA:
@@ -57,7 +57,7 @@ cnpg:
       secretAccessKey:
         key: "S3_SECRET_ACCESS_KEY"
   recovery:
-    destinationPath: "s3://backups"
+    destinationPath: "s3://demo-backup"
     endpointCA:
       secretName: s3-secret
     s3Credentials:
