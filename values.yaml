@@ -42,7 +42,7 @@ cnpg:
   backup:
     legacyMode: false
     destinationPath: "s3://demo-backup"
-    cron: '*/30 * * * *'
+    cron: "0 * * * *"
     retentionPolicy: 1d
     compression: gzip
     endpointCA:
