@@ -1,0 +1,27 @@
+{{- if .Values.vaultSecrets.enabled -}}
+{{ range $secret := .Values.vaultSecrets.items }}
+{{ $vaultPath := (printf "%s/%s" ($secret.basePath | default $.Values.vaultSecrets.basePath) $secret.subPath) }}
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultStaticSecret
+metadata:
+  name: {{ $secret.destination.name }}
+spec:
+  mount: {{ $.Values.vaultSecrets.mount }}
+  path: {{ $vaultPath }}
+  type: kv-v2
+  vaultAuthRef: vault-auth
+  destination:
+    create: true
+    name: {{ $secret.destination.name }}
+    type: {{ $secret.destination.type }}
+    {{- with $secret.destination.transformation }}
+    transformation:
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+    {{- with $secret.destination.rolloutRestartTargets }}
+    rolloutRestartTargets:
+      {{- . | toYaml | nindent 6 }}
+    {{- end }}
+{{- end -}}
+{{- end -}}

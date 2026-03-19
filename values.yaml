@@ -1,0 +1,71 @@
+vaultSecrets:
+  enabled: true
+  mount: democnpgrecovery
+  basePath: default
+  items:
+    - subPath: s3-secret
+      destination: 
+        name: s3-secret
+    - subPath: appuser-secret
+      destination: 
+        name: appuser-secret
+    - subPath: superuser-secret
+      destination: 
+        name: superuser-secret
+
+cnpg:
+  fullnameOverride: cnpg-cluster
+  dbName: app
+  credentials:
+    username: app
+    existingSecrets:
+      enabled: true
+      app:
+        secretName: appuser-secret
+      postgres:
+        secretName: superuser-secret
+  instances: 3
+  enableSuperuserAccess: true
+  pvcSize:
+    data: 1Gi
+    wal: 1Gi
+  replica:
+    endpointCA:
+      secretName: s3-secret
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  backup:
+    legacyMode: false
+    destinationPath: "s3://backups"
+    cron: 0 0 0 * * *
+    retentionPolicy: 1d
+    compression: gzip
+    endpointCA:
+      secretName: s3-secret
+    s3Credentials:
+      create: false
+      secretName: s3-secret
+      region:
+        key: "S3_REGION_NAME"
+      accessKeyId:
+        key: "S3_ACCESS_KEY_ID"
+      secretAccessKey:
+        key: "S3_SECRET_ACCESS_KEY"
+  recovery:
+    destinationPath: "s3://backups"
+    endpointCA:
+      secretName: s3-secret
+    s3Credentials:
+      create: false
+      secretName: s3-secret
+      region:
+        key: "S3_REGION_NAME"
+      accessKeyId:
+        key: "S3_ACCESS_KEY_ID"
+      secretAccessKey:
+        key: "S3_SECRET_ACCESS_KEY"

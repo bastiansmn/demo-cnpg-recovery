@@ -1,0 +1,8 @@
+cnpg:
+  mode: primary
+  instances: 3
+  backup:
+    enabled: true
+    endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r1.pi2.minint.fr
+  recovery:
+    endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r1.pi2.minint.fr
