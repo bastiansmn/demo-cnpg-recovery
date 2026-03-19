@@ -40,7 +40,7 @@ cnpg:
       cpu: 200m
       memory: 256Mi
   backup:
-    legacyMode: false # A ajuster selon si l'opérateur CNPG supporte le nouveau mode de backup Barman plugin.
+    legacyMode: true # A ajuster selon si l'opérateur CNPG supporte le nouveau mode de backup Barman plugin.
     destinationPath: "s3://demo-backup"
     cron: "0 * * * *"
     retentionPolicy: 1d
