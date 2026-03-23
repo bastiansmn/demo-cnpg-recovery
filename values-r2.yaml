@@ -1,11 +1,8 @@
 cnpg:
   enabled: true
-  mode: recovery
+  mode: primary
   backup:
-    enabled: false
+    enabled: true
     endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r2.pi2.minint.fr
   recovery:
     endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r2.pi2.minint.fr
-    extraArgs:
-      recoveryTarget:
-        targetTime: "2026-03-23 08:55:00+00" # spécifier la date pour le recovery
