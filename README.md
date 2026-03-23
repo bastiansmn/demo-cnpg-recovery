@@ -46,6 +46,10 @@ Prototype de basculement d'un cluster CloudNativePG (CNPG) entre deux régions v
 - `cnpg.backup.enabled: true` → backups et WAL vers S3 R1
 - `cnpg.backup.endpointURL` / `cnpg.recovery.endpointURL` → S3 R1
 
+S'assurer que la configuration des WALs fonctionne bien (soit dans les logs : `Archived WAL file`, soit dans le dashboard CNPG présent dans le Grafana de la console). On peut essayer de créer une table (via un script qui lance des commandes sql par exemple) pour vérifier si celle-ci sera présente dans la région secondaire après restauration.
+
+Il est conseillé de faire un backup avant de démarrer la bascule.
+
 ### R2 — cluster secondaire désactivé
 
 `values-r2.yaml` configure :
@@ -138,6 +142,8 @@ cnpg:
   recovery:
     endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r2.pi2.minint.fr
 ```
+
+Il n'est pas nécessaire de faire quoi que ce soit d'autre.
 
 > **Attention** : lors du passage de `recovery` à `primary`, CNPG supprime et recrée le cluster. C'est un comportement attendu — prévoir une courte indisponibilité.
 
