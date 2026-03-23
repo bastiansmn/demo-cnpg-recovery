@@ -64,6 +64,8 @@ Il est conseillé de faire un backup avant de démarrer la bascule.
 
 ## Procédure de basculement R1 → R2
 
+> Un exemple de la procédure de bascule est disponible sur la branche `demo-switch`, commit par commit.
+
 ### Pré-requis
 
 - La réplication S3 R1 → R2 est opérationnelle et à jour.
@@ -73,8 +75,6 @@ Il est conseillé de faire un backup avant de démarrer la bascule.
 ### Étape 1 — Arrêter le cluster R1
 
 L'objectif est d'éviter toute écriture pendant la bascule pour garantir la cohérence des données.
-
-**Option A — Via Helm (désactivation du cluster)**
 
 Modifier `values-r1.yaml` :
 
@@ -92,7 +92,7 @@ cnpg:
 
 Cela suspend les pods sans supprimer le cluster, ce qui permet un retour en arrière plus rapide si nécessaire.
 
-> Dans les deux cas, attendre que le dernier WAL soit bien répliqué sur S3 R2 avant de continuer.
+> Attendre que le dernier WAL soit bien répliqué sur S3 R2 avant de continuer (ceci devrait être instantané).
 
 ### Étape 2 — Activer le cluster R2 en mode recovery
 
@@ -108,6 +108,9 @@ cnpg:
     endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r2.pi2.minint.fr
   recovery:
     endpointURL: https://sdid-248f-n8n.s3obj.ecs.objstore.r2.pi2.minint.fr
+    extraArgs:
+      recoveryTarget:
+        targetTime: "2026-03-19 16:00:00+00" # Choisir la date adéquate
 ```
 
 CNPG va créer un cluster en mode `recovery` : il va lire le dernier basebackup disponible sur le S3 R2 puis rejouer les WAL jusqu'au point le plus récent.
@@ -170,6 +173,10 @@ Si R1 redevient disponible et que l'on souhaite revenir dessus :
 5. Désactiver R2.
 
 ---
+
+## Troubleshooting
+
+- Erreur "Expected empty archive" : Cette erreur apparaît lors d'une restauration CNPG quand le chemin S3 cible (`destinationPath`) contient déjà des données WAL ou des fichiers de backup. CNPG exige que l'archive soit vide avant d'y écrire. Pour corriger : vider ou supprimer le préfixe S3 concerné, ou utiliser un `destinationPath` différent (ex: incrémenter un suffixe). Attention à ne pas supprimer l'archive d'un cluster encore actif.
 
 ## Notes
 

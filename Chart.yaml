@@ -27,5 +27,5 @@ dependencies:
 - name: cnpg-cluster
   condition: cnpg.enabled
   alias: cnpg
-  version: 1.6.0
+  version: 1.7.1
   repository: https://this-is-tobi.github.io/helm-charts
