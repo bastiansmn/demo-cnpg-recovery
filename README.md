@@ -164,13 +164,15 @@ Il n'est pas nécessaire de faire quoi que ce soit d'autre.
 
 ## Retour arrière (R2 → R1)
 
+Le retour en arrière revient à faire exactement la même méthode évoqué en inversant R1 et R2.
+
 Si R1 redevient disponible et que l'on souhaite revenir dessus :
 
 1. S'assurer que R1 est vide / arrêté (plus aucune écriture).
 2. Si R2 a des backups actifs, vérifier que les WAL de R2 sont répliqués vers R1 (ou configurer la réplication dans l'autre sens).
-3. Modifier `values-r1.yaml` pour activer R1 en mode `recovery` pointant vers son propre S3.
-4. Une fois R1 restauré et opérationnel, l'arrêter et le repasser en `mode: primary` avec backup.
-5. Désactiver R2.
+3. Désactiver R2 et attendre l'arrêt complet du cluster (pour ne pas perdre de WALs).
+4. Modifier `values-r1.yaml` pour activer R1 en mode `recovery` pointant vers son propre S3 (ne pas activer les backups pour le moment).
+5. Une fois R1 restauré et opérationnel, l'arrêter et le repasser en `mode: primary` avec backup activés.
 
 ---
 
